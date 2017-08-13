@@ -74,5 +74,17 @@
 	Functions which are linear in unknown parameters are known as 
     Linear Models.
     
-    .
+### Overfitting:
+	For a given model complexity, the overfitting problem becomes less 
+    severe as the size of data increases.
+    
+    The larger the data-set, the more complex(in other words more flexible)
+    the model that we can afford to fit the data.
+    
+    One rough heuristics to choose the data set is: 
+    	The number of data points should be no less than some multiple
+        	of the no. of adaptive parameters in the model.
+            
+    However, no. of parameters is not the only measure of model complexity.
+    
 -------------------------------------------------------------------------------------
