@@ -73,4 +73,6 @@
 ### Linear Models:
 	Functions which are linear in unknown parameters are known as 
     Linear Models.
+    
+    .
 -------------------------------------------------------------------------------------
