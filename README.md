@@ -83,8 +83,83 @@
     
     One rough heuristics to choose the data set is: 
     	The number of data points should be no less than some multiple
-        	of the no. of adaptive parameters in the model.
+        of the no. of adaptive parameters in the model.
             
     However, no. of parameters is not the only measure of model complexity.
     
+    Overfitting is an general problem of Maximum Likelihood Estimation(MLE)
+    and it can be avoided by choosing the Bayesian approach.
+    
+
+-------------------------------------------------------------------------------------
+1. Regularization
+2. Ridge Regression
+3. Weight Decay (in Neural Networks)
+
+### Expectation `E[*]`:
+>The average value of some function `f(x)` under a probability distribution `p(x)` is called the `Expectation` of `f(x)` and is denoted by `E[f]`.
+
+>$$E[f] = \sum_x{ p(x)f(x) }$$
+
+>(Average is weighted by relative probabilities of different values of `x`)
+>
+> $E_x[ f(x,y) ]$ denotes average of function `f(x,y)` w.r.t distribution of `x`. So, `E[f(x,y)]` will be a function in `y`.
+> 
+> We can also define `Conditional Expectation`(`E[f|y]`) w.r.t. conditional distribution (`p(x|y)`) in similar manner.
+
+> $$E[f|y] = \sum_x{ p(x|y)f(x) }$$
+
+-------------------------------------------------------------------------------------
+
+### Variance `var[*]` & Covariance `cov[*]`:
+Variance `var[*]`: 
+>It provides a measure of how much variability there is in `f(x)`around its mean value (`E[f(x)]`).
+>
+> $$var[f(x)] = E[( f(x) - E[f(x)] )^2 ]$$
+> $$var[X] = E[(X)^2] - (E[X])^2$$
+> 
+Covariance `cov[*]`:
+> For two random variables `x` and `y`, the covariance (`cov[x,y]`) is a measure of the extent to which `x` and `y` vary together.
+>$$cov[x,y] = E[xy] - E[x]E[y]$$
+> 
+> If `x` and `y` are `mutually independent` then their covariance is `zero`.
+> In case of two vectors of random variables **$X$** and **$Y$**, covariance is a Matrix.
+>Covariance of components of vector **$X$** with each other :
+>$$cov[X] = cov[X,X]$$ 
+
+-------------------------------------------------------------------------------------
+### Likelihood function: $p(D|w)$
+>In ML literature, `the negative log` of Likelihood function is called `Error function`
+>$$Error function:-log(p(D|w))$$
+>
+>In MLE estimation, we try to **maximize** the _likelihood function_ $(p(D|w))$ & b'coz $log()$ is a monotonically increasing function thus, **`maximizing likelihood minimizes error`** 
+>(remember: error is negative of log, so error is a monotonically decreasing function)
+
+### Frequestist v/s Bayesian viewpoints:
+One common criticism of Bayesian viewpoint is that, the `prior distribution` is often selected on the basis of mathematical convenience rather than as a reflection of any prior beliefs.
+
+_Bayesian approach based on poor priors can give poor results with high confidence._
+
+-------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------
+
+
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+
+-------------------------------------------------------------------------------------
+
+
 -------------------------------------------------------------------------------------
