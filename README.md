@@ -116,7 +116,7 @@ Variance `var[*]`:
 >It provides a measure of how much variability there is in `f(x)`around its mean value (`E[f(x)]`).
 >
 > $$var[f(x)] = E[( f(x) - E[f(x)] )^2 ]$$
-> $$var[X] = E[(X)^2] - (E[X])^2$$
+> $$var[X] = \sigma^2 = E[(X)^2] - (E[X])^2$$
 > 
 Covariance `cov[*]`:
 > For two random variables `x` and `y`, the covariance (`cov[x,y]`) is a measure of the extent to which `x` and `y` vary together.
@@ -141,18 +141,44 @@ One common criticism of Bayesian viewpoint is that, the `prior distribution` is 
 _Bayesian approach based on poor priors can give poor results with high confidence._
 
 -------------------------------------------------------------------------------------
+				The Gaussian Distribution
 
+For a single `real-valued` varaiable `x`, the Gaussian Distribution is defined as:
+
+$$ \mathcal{N}(x|\mu,\sigma^2) = \frac{1}{(2\pi\sigma^2)^{1/2}} \exp\Bigg\{-\frac{1}{2\sigma^2}(x-\mu)^2\Bigg\}$$
+
+`Mean` = $\mu$
+`Variance` = $\sigma^2$
+`Standard Deviation` = $\sigma$
+`Precision`$(\beta)$ = $1/\sigma^2$
+> The `maximum` of a distribution is called `Mode`
+> For a Gaussian Distribution, `Mode` coincides with `Mean`($\mu$)
+
+$$ \mathcal{N}(x|\mu, \sigma^2) > 0 $$
 
 -------------------------------------------------------------------------------------
 
+$$ \int\limits_{-\infty}^{+\infty}\mathcal{N}(x|\mu, \sigma^2)\ dx = 1 $$
 
+Expectation or Mean :
+$$ E[x] = \int\limits_{-\infty}^{+\infty}\mathcal{N}(x|\mu, \sigma^2)\ x\ dx = \mu $$
+and
+$$ E[x^2] = \int\limits_{-\infty}^{+\infty}\mathcal{N}(x|\mu, \sigma^2)\ x^2\ dx = (\mu^2 + \sigma^2) $$
 
-
+So **variance** `var[x]` is,
+$$ \sigma^2 = E[x^2] - E[x] $$
 
 -------------------------------------------------------------------------------------
+			The Multivariate Gaussian Distribution
 
+The Gaussian Distribution defined over a **`D-dimensional`** vector $\bold{X}$ of continuous variables is :
 
+$$ \mathcal{N}(\bold{X}|\bold{\mu}, \bold{\Sigma}) = \frac{1}{(2\pi)^{D/2}}\ \frac{1}{|\Sigma|^{1/2}}\ \exp\Bigg\{-\frac{1}{2}\ (\bold{X}-\bold{\mu})^T\ \bold{\Sigma}^{-1}\ (\bold{X}-\bold{\mu}) \Bigg\}$$
 
+where,
+$\bold{X} =$ `D-dimensional`**vector** of continuous variables
+$\bold{\mu} =$ `Mean` $=$ `D-dimensional` **vector**
+$\bold{\Sigma} =$ `Covariance` $=$ `DxD` **Matrix**
 
 -------------------------------------------------------------------------------------
 
