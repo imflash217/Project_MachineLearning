@@ -198,7 +198,7 @@ $$p(\bold{X}|\bold{\mu, \sigma^2}) = \prod_{n=1}^{N}\mathcal{N}(x_n|\mu, \sigma^
 -------------------------------------------------------------------------------------
 1. `Binomial and Multinomial Distributions` for `Discrete random varables`
 2. `Gaussian distribution` for `Continuous random variables`
-3. **`Parametric Distributions`**: Distributions that are governed by small no. of adaptive parameters (like $\mu$ and $\sigma$ for Gaussian Distributions).
+3. **`Parametric Distributions`**: Distributions that are governed by small no. of `adaptive parameters` (like $\mu$ and $\sigma$ for Gaussian Distributions).
 	
 	One limitation of the parametreic approach is that it assumes a specific functional form of distribution which may turn out to be inappropriate for a particular application.
     
@@ -211,13 +211,27 @@ $$p(\bold{X}|\bold{\mu, \sigma^2}) = \prod_{n=1}^{N}\mathcal{N}(x_n|\mu, \sigma^
 
 8. **`Non-parametric Density Estimation`**: Here, Distributions typically depend on the size of the data-set. Such models still have `parameters`, but these control the `model complexity` rather than the Distribution.
 
+.......................................................................................................................................
+
+It is a general property of **`Bayesian Learning`** that as we observe more and more data $D$ the `uncertainity` represented by the `posterior distribution` $p(\theta|D)$ decreases steadily. Below is the explanation:
+
+For eg: Consider a general `Bayesian` inference problem for a `parameter` $\theta$ for which we have observed a `data-set` $D$, described by the `Joint Distribution` $p(\theta, D)$. Then it can be deived that:
+
+$$ E_{\theta}[\theta] = E_{D}[E_{\theta}[\theta]]$$
+
+The above result says that the **posterior mean of $\theta$** averaged over the distribution generating the data $D$ is equal to the **prior mean of $\theta$**, which is proven in below derivation:
+
 
 -------------------------------------------------------------------------------------
-
-
+$$ E_{\theta}[\theta] = \int_{\theta}\theta\ p(\theta)\ d\theta $$
+$$ E_D[E_{\theta}[\theta|D]] = \int_D\Bigg\{\int_{\theta}\theta\ p(\theta|D)\ d\theta \Bigg\}\ p(D)\ dD $$
+$$E_D[E_{\theta}[\theta|D]] = \int_{\theta}\Bigg\{\int_{D}\ \bigg(p(\theta|D)\ p(D)\bigg)\ dD \Bigg\}\ \theta\ d\theta $$
+$$E_D[E_{\theta}[\theta|D]] = \int_{\theta}\Bigg\{\int_{D}\ p(\theta, D)\ dD \Bigg\}\ \theta\ d\theta $$
+$$E_D[E_{\theta}[\theta|D]] = \int_{\theta}p(\theta)\ \theta\ d\theta = E_{\theta}[\theta]$$
+So, 
+$$ E_{\theta}[\theta] = E_{D}[E_{\theta}[\theta]]$$
 
 -------------------------------------------------------------------------------------
-
 
 
 -------------------------------------------------------------------------------------
