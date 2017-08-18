@@ -171,21 +171,107 @@ $$ \sigma^2 = E[x^2] - E[x] $$
 -------------------------------------------------------------------------------------
 			The Multivariate Gaussian Distribution
 
-The Gaussian Distribution defined over a **`D-dimensional`** vector $\bold{X}$ of continuous variables is :
+The Gaussian Distribution defined over a **`D-dimensional`** vector $\bold{x}$ of continuous variables is :
 
-$$ \mathcal{N}(\bold{X}|\bold{\mu}, \bold{\Sigma}) = \frac{1}{(2\pi)^{D/2}}\ \frac{1}{|\Sigma|^{1/2}}\ \exp\Bigg\{-\frac{1}{2}\ (\bold{X}-\bold{\mu})^T\ \bold{\Sigma}^{-1}\ (\bold{X}-\bold{\mu}) \Bigg\}$$
+$$ \mathcal{N}(\bold{x}|\bold{\mu}, \bold{\Sigma}) = \frac{1}{(2\pi)^{D/2}}\ \frac{1}{|\Sigma|^{1/2}}\ \exp\Bigg\{-\frac{1}{2}\ (\bold{x}-\bold{\mu})^T\ \bold{\Sigma}^{-1}\ (\bold{x}-\bold{\mu}) \Bigg\}$$
 
 where,
-$\bold{X} =$ `D-dimensional`**vector** of continuous variables
+$\bold{x} =$ $(x_1, x_2, x_3.......x_D)^T$ $=$ `D-dimensional`**vector** of continuous variables 
 $\bold{\mu} =$ `Mean` $=$ `D-dimensional` **vector**
 $\bold{\Sigma} =$ `Covariance` $=$ `DxD` **Matrix**
 
 -------------------------------------------------------------------------------------
+1. **`i.i.d`** = **`independent and identically distributed`** : Data points that are drawn independentally from the same distribution.
+2. `Joint Probability` of `independent` events is given by the product of the `marginal probabilities` of each event separately.
 
+So, suppose we have a `data-set` of $N$ observations of `single-valued variable x`: 
+
+$$\bold{X} = (x_1, x_2, x_3.....x_N)^T$$
+
+Then, the probability of the `data-set` $\bold{X}$ or the `likelihood function` of the Gaussian is given by: 
+
+$$p(\bold{X}|\bold{\mu, \sigma^2}) = \prod_{n=1}^{N}\mathcal{N}(x_n|\mu, \sigma^2)$$
+
+
+>Note: ($\bold{X}$ is not a Vector like $\bold{x}$, it is a collection of N observations of single valued variable x.
+
+-------------------------------------------------------------------------------------
+1. `Binomial and Multinomial Distributions` for `Discrete random varables`
+2. `Gaussian distribution` for `Continuous random variables`
+3. **`Parametric Distributions`**: Distributions that are governed by small no. of adaptive parameters (like $\mu$ and $\sigma$ for Gaussian Distributions).
+	
+	One limitation of the parametreic approach is that it assumes a specific functional form of distribution which may turn out to be inappropriate for a particular application.
+    
+4. **`Density Estimation`**: Modelling the _probability distribution_ $p(\bold{x})$ of a random variable $\bold{x}$ given a finite set $\{\bold{x_1, x_2, x_3........x_N}\}$ of `observations`.
+5. The `conjugate prior` for the parameters of `multinomial distribution` is called **`Diritchlet Distributions`**
+6. While, the `conjugate prior` for the Gaussian is another Gaussian.
+7. `Exponential family of Distributions`.
+
+------------------------------------------------------------------------------------
+
+8. **`Non-parametric Density Estimation`**: Here, Distributions typically depend on the size of the data-set. Such models still have `parameters`, but these control the `model complexity` rather than the Distribution.
+
+
+-------------------------------------------------------------------------------------
 
 
 
 -------------------------------------------------------------------------------------
 
 
+
 -------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------
+
+
