@@ -223,6 +223,7 @@ The above result says that the **posterior mean of $\theta$** averaged over the 
 
 
 -------------------------------------------------------------------------------------
+Proof:
 $$ E_{\theta}[\theta] = \int_{\theta}\theta\ p(\theta)\ d\theta $$
 $$ E_D[E_{\theta}[\theta|D]] = \int_D\Bigg\{\int_{\theta}\theta\ p(\theta|D)\ d\theta \Bigg\}\ p(D)\ dD $$
 $$E_D[E_{\theta}[\theta|D]] = \int_{\theta}\Bigg\{\int_{D}\ \bigg(p(\theta|D)\ p(D)\bigg)\ dD \Bigg\}\ \theta\ d\theta $$
@@ -232,9 +233,17 @@ So,
 $$ E_{\theta}[\theta] = E_{D}[E_{\theta}[\theta]]$$
 
 -------------------------------------------------------------------------------------
-
+1. `Simplex`: A bounded linear manifold.
+2. 
 
 -------------------------------------------------------------------------------------
+
+				Logistic Regression
+                
+1. Sometimes, in case of small trainig data, learning $w_0, w_i$ from the training data produces more promissing results as compared to learning $\mu, \sigma$
+
+
+
 
 
 
