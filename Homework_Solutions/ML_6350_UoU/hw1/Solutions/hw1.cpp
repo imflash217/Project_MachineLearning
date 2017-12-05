@@ -4,7 +4,7 @@
 // Functions
 
 // Using the training data to segregate the {First Name, Middle Name, Last Name, <feature Vector>, Label}
-void f_parseData(std::string& singleInstance, vvs& dataMatrix, int rowIndex, std::string& attrDelim){
+void f_parseData(std::string& singleInstance, type_vvs& dataMatrix, int rowIndex, std::string& attrDelim){
 	// parsing the training and test data as Vector<Vector>
 	int attr_count = 0;
 	std::string my_substring;
@@ -17,11 +17,20 @@ void f_parseData(std::string& singleInstance, vvs& dataMatrix, int rowIndex, std
 		// std::cout << "[" << my_substring << "] ";
 		delimIndex = my_substring.find_first_of(attrDelim);
 		my_substring = my_substring.substr(delimIndex+1, std::string::npos);
-		
-
 	}
 	std::cout << " #" << attr_count << std::endl;
 	std::cout << std::endl;
+
+	// filling the data Matrix with the attributes
+	switch(attr_count){
+		case 1:
+			dataMatrix[rowIndex][]
+
+		case 2:
+
+		case 3:
+	}
+
 	
 }
 
@@ -34,8 +43,8 @@ int main(int argc, char const *argv[])
 	std::string singleDataInstance;
 	std::ifstream trainDataFile;
 	std::ifstream testDataFile;
-	vvs trainDataTable;
-	vvs testDataTable;
+	type_vvs trainDataTable;
+	type_vvs testDataTable;
 	int noOfTrainSamples = 0;
 	int noOfTestSamples = 0;
 
