@@ -5,3 +5,4 @@
 
 typedef std::vector<std::string> type_vs;
 typedef std::vector<type_vs> type_vvs;
+typedef std::vector<int> type_vi;
