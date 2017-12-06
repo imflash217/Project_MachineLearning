@@ -66,17 +66,91 @@ void f_parseData(std::string& singleInstance, type_vvs& dataMatrix, int rowIndex
 
 }
 
-void f_generateFeatureVector(vvs& dataMatrix){
+void f_generateFeatureVector(type_vvs& X){
 
 	/*
-	 * <feature vector> :  <
-	 *						(firstName > lastName | Y/N), 
-	 *						(middleName == EMPTY | Y/N),
-	 *						(firstName[0] == firstName[firstName.length()-1] | Y/N),
-	 *						(firstName > lastName | Y/N),
-	 *						(firstName[1] == {a,e,i,o,u} | Y/N),
-	 *						(lastName.length() % 2 == 0 | Y/N)>
+	 * Y =1, N = 0
+	 * <X[i][4:9] = feature vector> :  <
+	 *			X[i][4] = x0 = (firstName.size() > lastName.size() | Y/N), 
+	 *			X[i][5] = x1 = (middleName != EMPTY | Y/N),
+	 *			X[i][6] = x2 = (firstName[0] == firstName[firstName.length()-1] | Y/N),
+	 *			X[i][7] = x3 = (firstName > lastName | Y/N),
+	 *			X[i][8] = x4 = (firstName[1] == {a,e,i,o,u} | Y/N),
+	 *			X[i][9] = x5 = (lastName.length() % 2 == 0 | Y/N) >
 	 */
+
+	auto totalRows = X.size();
+	// std::cout << totalRows << std::endl;
+
+	for(auto X_i : X){
+
+		// calculating x0 = (firstName.size() > lastName.size() | Y/N)
+
+		if(X_i[1].size() > X_i[3].size()){
+			X_i.push_back("1");
+			// std::cout << "greater" << X_i[4] << std::endl;
+		}else{
+			X_i.push_back("0");
+			// std::cout << "smaller" << X_i[4] << std::endl;
+		}
+
+		// calculating x1 = (middleName != EMPTY | Y/N)
+
+		if(X_i[2] == ""){
+			X_i.push_back("0");			// don't have a middleName
+		}else{
+			X_i.push_back("1");			// have a middleName
+		}
+
+		// calculating x2 = (firstName[0] == firstName[firstName.length()-1] | Y/N)
+		if(std::tolower((X_i[1][0]), std::locale()) == std::tolower((X_i[1][X_i[1].size()-1]), std::locale())){
+			// std::cout << "wow!!!!!!!!!!!!!!!" << std::endl;
+			X_i.push_back("1");
+		}else{
+			// std::cout << "Nope!!!!!!!!!!!!!!!" << std::endl;
+			X_i.push_back("0");
+		}
+
+		// calculating x3 = (firstName > lastName | Y/N)
+		auto firstName = X_i[1];
+		auto lastName = X_i[3];
+
+		for(auto& itr : firstName){
+			itr = std::tolower(itr, std::locale());
+		}
+
+		for(auto& itr : last){
+			itr = std::tolower(itr, std::locale());
+		}
+
+		
+		// std::cout << "//////////////////" << std::endl;
+		// std::cout << firstName << "//////////////////" << std::endl;
+
+		// std::cout << X_i[1] << "//////////////////" << std::endl;
+
+
+
+		// calculating x4 = (firstName[1] == {a,e,i,o,u} | Y/N)
+
+
+
+
+		// calculating x5 = (lastName.length() % 2 == 0 | Y/N)
+
+
+
+
+
+
+		// std::cout << X_i[0] << " | " 
+		// 		<< X_i[1] << ", " << X_i[2] << ", " << X_i[3] << " | "
+		// 		<< X_i[4] << std::endl;
+	}
+
+
+
+
 
 
 
@@ -125,8 +199,8 @@ int main(int argc, char const *argv[])
 	}
 
 	// // std::cout << trainDataTable[0][0] << std::endl;
-	std::cout << noOfTrainSamples << "," << noOfTestSamples << std::endl;
-	// // std::cout << 
+	std::cout << noOfTrainSamples << ", " << noOfTestSamples << std::endl;
+	std::cout << trainDataTable.size() << ", " << testDataTable.size() << std::endl;
 
 	// Generating the feature vector for each instance training and test data
 	f_generateFeatureVector(trainDataTable);
