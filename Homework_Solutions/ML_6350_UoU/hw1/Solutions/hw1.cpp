@@ -15,15 +15,15 @@ void f_parseData(std::string& singleInstance, type_vvs& dataMatrix, int rowIndex
 	// std::cout << delimIndex ;
 	while(delimIndex != std::string::npos){
 		attr_count += 1;
-		std::cout << delimIndex << ", " ;
+		// std::cout << delimIndex << ", " ;
 		// std::cout << "[" << my_substring << "] ";
 		delimIndex = my_substring.find_first_of(attrDelim);
 		tempStorage.push_back(my_substring.substr(0, delimIndex));
 		my_substring = my_substring.substr(delimIndex+1, std::string::npos);
-		std::cout << tempStorage[attr_count-1] << ", "  << std::endl;
+		// std::cout << tempStorage[attr_count-1] << ", "  << std::endl;
 	}
-	std::cout << " #" << attr_count << std::endl;
-	std::cout << std::endl;
+	// std::cout << " #" << attr_count << std::endl;
+	// std::cout << std::endl;
 
 	switch(attr_count){
 		case 1:
@@ -58,11 +58,14 @@ void f_parseData(std::string& singleInstance, type_vvs& dataMatrix, int rowIndex
 	// tempStorage[0] += tempStorage[2];
 
 	// std::cout << "@@@@@@@@@@@@@@@@@" << tempStorage[0] << std::endl;
-
-	std::cout << "****** " << dataMatrix[rowIndex][0] << ", "
-							<< dataMatrix[rowIndex][1] << ", "
-							<< dataMatrix[rowIndex][2] << ", "
-							<< dataMatrix[rowIndex][3] << "\n" << std::endl;
+	
+	/*
+		std::cout << "****** " << dataMatrix[rowIndex][0] << ", "
+								<< dataMatrix[rowIndex][1] << ", "
+								<< dataMatrix[rowIndex][2] << ", "
+								<< dataMatrix[rowIndex][3] << "\n" 
+								<< std::endl;
+	*/
 
 }
 
@@ -79,10 +82,10 @@ void f_generateFeatureVector(type_vvs& X){
 	 *			X[i][9] = x5 = (lastName.length() % 2 == 0 | Y/N) >
 	 */
 
-	auto totalRows = X.size();
+	// auto totalRows = X.size();
 	// std::cout << totalRows << std::endl;
 
-	for(auto X_i : X){
+	for(auto& X_i : X){
 
 		// calculating x0 = (firstName.size() > lastName.size() | Y/N)
 
@@ -115,45 +118,68 @@ void f_generateFeatureVector(type_vvs& X){
 		auto firstName = X_i[1];
 		auto lastName = X_i[3];
 
+			// converting firstName & lastName into lowercase
 		for(auto& itr : firstName){
 			itr = std::tolower(itr, std::locale());
 		}
 
-		for(auto& itr : last){
+		for(auto& itr : lastName){
 			itr = std::tolower(itr, std::locale());
 		}
-
-		
-		// std::cout << "//////////////////" << std::endl;
+			// comparing the firstName and lastName
+		if(firstName.compare(lastName) < 0){
+			// firstName comes alphabetically before lastName
+			X_i.push_back("1");
+		}else{
+			// firstName comes alphabetically after lastName
+			X_i.push_back("0");
+		}
+		// std::cout << firstName.compare(lastName) << " : " << firstName << " : " << lastName << "//////////////////" << std::endl;
 		// std::cout << firstName << "//////////////////" << std::endl;
-
 		// std::cout << X_i[1] << "//////////////////" << std::endl;
 
 
-
 		// calculating x4 = (firstName[1] == {a,e,i,o,u} | Y/N)
-
-
-
+		std::string vowels = "aeiou";
+		if(vowels.find_first_of(firstName[1]) == std::string::npos){
+			X_i.push_back("0");			// 2nd letter of firstName NOT a vowel
+			// std::cout << "ohNo~~~" ;
+		}else{
+			X_i.push_back("1");			// 2nd letter of firstName IS a vowel
+			// std::cout << "yup~~~";
+		}
 
 		// calculating x5 = (lastName.length() % 2 == 0 | Y/N)
 
+		if(X_i[3].size() % 2 == 0){
+			X_i.push_back("1");			// size of lastName is EVEN
+		}else{
+			X_i.push_back("0");			// size of lastName is ODD
+		}
 
-
-
-
-
-		// std::cout << X_i[0] << " | " 
-		// 		<< X_i[1] << ", " << X_i[2] << ", " << X_i[3] << " | "
-		// 		<< X_i[4] << std::endl;
+		/*
+			std::cout << X_i[0] << " | " 
+					<< X_i[1] << ", " << X_i[2] << ", " << X_i[3] << " | "
+					<< X_i[4] << " | "
+					<< X_i[5] << " | "
+					<< X_i[6] << " | "
+					<< X_i[7] << " | "
+					<< X_i[8] << " | "
+					<< X_i[9] << " | "
+					<< std::endl;
+		*/
 	}
 
+}
 
 
-
-
-
-
+void f_printDataTable(type_vvs& inputTable){
+	for(auto itr : inputTable){
+		for(auto x : itr){
+			std::cout << x << " | ";
+		}
+		std::cout << std::endl;
+	}
 }
 
 
@@ -177,7 +203,7 @@ int main(int argc, char const *argv[])
 		return(-1);
 	}
 	while(std::getline(trainFile, singleDataInstance)){
-		std::cout << singleDataInstance << std::endl;
+		// std::cout << singleDataInstance << std::endl;
 		f_parseData(singleDataInstance, trainDataTable, noOfTrainSamples, my_attrDelim);
 		noOfTrainSamples++;
 	}
@@ -190,7 +216,7 @@ int main(int argc, char const *argv[])
 		return(0);		// successfully built the tree but failed to evaluate on NULL test data
 	}
 	while(std::getline(testFile, singleDataInstance)){
-		std::cout << singleDataInstance << std::endl;
+		// std::cout << singleDataInstance << std::endl;
 		f_parseData(singleDataInstance, testDataTable, noOfTestSamples, my_attrDelim);
 		noOfTestSamples++;
 		// std::cout << singleDataInstance[0] << std::endl;
@@ -199,12 +225,18 @@ int main(int argc, char const *argv[])
 	}
 
 	// // std::cout << trainDataTable[0][0] << std::endl;
-	std::cout << noOfTrainSamples << ", " << noOfTestSamples << std::endl;
+	// std::cout << noOfTrainSamples << ", " << noOfTestSamples << std::endl;
 	std::cout << trainDataTable.size() << ", " << testDataTable.size() << std::endl;
 
 	// Generating the feature vector for each instance training and test data
 	f_generateFeatureVector(trainDataTable);
 	f_generateFeatureVector(testDataTable);
+
+	f_printDataTable(trainDataTable);
+	f_printDataTable(testDataTable);
+
+
+
 
 
 }
