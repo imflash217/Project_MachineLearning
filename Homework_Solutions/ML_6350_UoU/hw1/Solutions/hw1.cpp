@@ -56,9 +56,7 @@ void f_parseData(std::string& singleInstance, type_vvs& dataMatrix, int rowIndex
 	}
 
 	// tempStorage[0] += tempStorage[2];
-
 	// std::cout << "@@@@@@@@@@@@@@@@@" << tempStorage[0] << std::endl;
-	
 	/*
 		std::cout << "****** " << dataMatrix[rowIndex][0] << ", "
 								<< dataMatrix[rowIndex][1] << ", "
@@ -138,7 +136,6 @@ void f_generateFeatureVector(type_vvs& X){
 		// std::cout << firstName << "//////////////////" << std::endl;
 		// std::cout << X_i[1] << "//////////////////" << std::endl;
 
-
 		// calculating x4 = (firstName[1] == {a,e,i,o,u} | Y/N)
 		std::string vowels = "aeiou";
 		if(vowels.find_first_of(firstName[1]) == std::string::npos){
@@ -181,6 +178,9 @@ void f_printDataTable(type_vvs& inputTable){
 		std::cout << std::endl;
 	}
 }
+
+
+
 
 
 
@@ -235,8 +235,13 @@ int main(int argc, char const *argv[])
 	f_printDataTable(trainDataTable);
 	f_printDataTable(testDataTable);
 
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
