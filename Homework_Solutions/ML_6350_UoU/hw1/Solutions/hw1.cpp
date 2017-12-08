@@ -1,5 +1,6 @@
 #include "header.h"
 #include <cstddef>		// std::size_t
+#include <cmath>		// log2()
 
 // Functions
 
@@ -169,7 +170,7 @@ void f_generateFeatureVector(type_vvs& X){
 
 }
 
-
+// print the post-processed data table(input, feature vector, labels)
 void f_printDataTable(type_vvs& inputTable){
 	for(auto itr : inputTable){
 		for(auto x : itr){
@@ -179,6 +180,27 @@ void f_printDataTable(type_vvs& inputTable){
 	}
 }
 
+// calculating the entropy for each node
+void f_calculateEntropy(node* my_Node){
+	
+	double &entropy = my_Node->entropy;
+	type_vvs &labelCounts = my_Node->classifiedLabelCounts;
+	int totalInstances = 0;			// total no of instances that are input for this node
+	type_vi countArray;				// stores the counts for each label at this node 
+
+	for(auto itrLabel : labelCounts){
+		int itrCount = std::stoi(itrLabel[1]);
+		countArray.push_back(itrCount);
+		totalInstances += itrCount;
+		std::cout << itrCount << "/*/*/*/" << std::endl;
+	}
+	for(auto cnt : countArray){
+		// H(S) = - sum(p_i * log2(p_i));
+		entropy = (cnt/totalInstances) * log2(cnt/totalInstances);
+		std::cout << "entropy = " << entropy << std::endl;
+	}
+
+}
 
 
 

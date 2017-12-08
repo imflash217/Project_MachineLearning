@@ -13,16 +13,16 @@ typedef std::vector<int> type_vi;
 class node{
 public:
 	std::string nodeID;
-	node* parentNode;								// parent node
-	std::string parentValue;						// The value of the parent node of which this node is a child
-	std::string splitOn_feature;					// feature on which the node is split
-	std::vector<std::string> feature_values;		// values that the node's feature can take
-	bool isLeaf;									// if the node is a leaf node then TRUE else FALSE
-	std::string label;								// The LABEL if the node isLeaf
-	type_vvs classifiedLabelsCount;					// count of each classified labels input to the node
-	double nodeEntropy;								// entropy of the node
-	std::vector<node*> children;					// the children nodes
-}
+	node* parentNode;						// parent node
+	std::string parentValue;				// The value of the parent node of which this node is a child
+	std::string splitOn_feature;			// feature on which the node is split
+	type_vs feature_values;					// values that the node's feature can take
+	bool isLeaf;							// if the node is a leaf node then TRUE else FALSE
+	std::string label;						// The LABEL if the node isLeaf
+	type_vvs classifiedLabelCounts;			// count of each classified labels input to the node
+	double entropy;						// entropy of the node
+	std::vector<node*> children;			// the children nodes
+};
 
 void f_parseData(std::string&, type_vvs&, int, std::string&);
 void f_generateFeatureVector(type_vvs&);
