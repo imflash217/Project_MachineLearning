@@ -185,22 +185,44 @@ void f_calculateEntropy(node* my_Node){
 	
 	double &entropy = my_Node->entropy;
 	type_vvs &labelCounts = my_Node->classifiedLabelCounts;
-	int totalInstances = 0;			// total no of instances that are input for this node
-	type_vi countArray;				// stores the counts for each label at this node 
+	int &totalInstances = my_Node->totalCount;			// total no of instances that are input for this node
+	type_vi countArray;				// stores the counts (int) for each label at this node 
 
 	for(auto itrLabel : labelCounts){
 		int itrCount = std::stoi(itrLabel[1]);
 		countArray.push_back(itrCount);
 		totalInstances += itrCount;
-		std::cout << itrCount << "/*/*/*/" << std::endl;
+		std::cout << itrCount << "*/*/*" << totalInstances << std::endl;
 	}
 	for(auto cnt : countArray){
 		// H(S) = - sum(p_i * log2(p_i));
-		entropy = (cnt/totalInstances) * log2(cnt/totalInstances);
+		entropy -= (cnt/totalInstances) * log2(cnt/totalInstances);
 		std::cout << "entropy = " << entropy << std::endl;
 	}
+}
+
+// create nodes for the Decision Tree
+
+type_vvn f_generateDecisionTree(type_vvs &X){
+	type_vvn decisionTree;		// a 2D matrix of nodes, each row is level in DT
+
+	// create nodes
+	
+
+
+
+
+
+
+	return decisionTree;
 
 }
+
+
+
+
+
+
 
 
 
@@ -256,6 +278,10 @@ int main(int argc, char const *argv[])
 
 	f_printDataTable(trainDataTable);
 	f_printDataTable(testDataTable);
+
+	// Decision Tree generation
+	type_vvn decisionTree = f_generateDecisionTree(trainDataTable)
+
 
 }
 

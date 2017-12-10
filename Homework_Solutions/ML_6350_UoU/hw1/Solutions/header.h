@@ -20,9 +20,13 @@ public:
 	bool isLeaf;							// if the node is a leaf node then TRUE else FALSE
 	std::string label;						// The LABEL if the node isLeaf
 	type_vvs classifiedLabelCounts;			// count of each classified labels input to the node
-	double entropy;						// entropy of the node
+	int totalCount;							// total number of labelled examples for the node
+	double entropy;							// entropy of the node
 	std::vector<node*> children;			// the children nodes
 };
+
+typedef std::vector<node> type_vn;
+typedef std::vector<type_vn> type_vvn;
 
 void f_parseData(std::string&, type_vvs&, int, std::string&);
 void f_generateFeatureVector(type_vvs&);
