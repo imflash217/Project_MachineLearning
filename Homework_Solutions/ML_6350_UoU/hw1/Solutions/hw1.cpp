@@ -181,7 +181,7 @@ void f_printDataTable(type_vvs& inputTable){
 }
 
 // calculating the entropy for each node
-void f_calculateEntropy(node* my_Node){
+void f_calculateEntropy(Node* my_Node){
 	
 	double &entropy = my_Node->entropy;
 	type_vvs &labelCounts = my_Node->classifiedLabelCounts;
@@ -204,9 +204,50 @@ void f_calculateEntropy(node* my_Node){
 // create nodes for the Decision Tree
 
 type_vvn f_generateDecisionTree(type_vvs &X){
+
+	// <featureVector> = <X_i[4]...., X_i[9]>
+
 	type_vvn decisionTree;		// a 2D matrix of nodes, each row is level in DT
 
 	// create nodes
+	Node rootNode;		// default initialized
+	// check if the decisionTree is empty...if YES, then calculate the Global Entropy H_S
+	auto &H_S = rootNode.entropy;
+	auto &indicesArray = rootNode.sampleIndices;
+	auto &classifiedLabelCounts = rootNode.classifiedLabelCounts;
+	type_vi labelCountArray;
+
+	for (int i = 0; i < X.size(); i++){
+		indicesArray.push_back(i);
+	}
+
+	std::cout << "rus" << indicesArray[0] << std::endl;
+
+	for (int i = 0; i < indicesArray.size(); i++){
+		// counting the total no samples for each label
+
+		// std::cout << "rus" << indicesArray[i] << std::endl;
+		bool newLabelFound = true;
+		for(int j = 0; j < classifiedLabelCounts.size(); j++){
+			if(classifiedLabelCounts[j][0] == X[i][0]){
+				labelCountArray[j]++;
+				newLabelFound = false;
+				std::cout << "rusX" << labelCountArray[j] << std::endl;
+				break;
+			}
+		}
+		std::cout << "rusPot" << newLabelFound << i << std::endl;
+
+		if(newLabelFound){
+			type_vs temp = {X[i][0], "1"};	// when encountering a new label
+			classifiedLabelCounts.push_back(temp);
+			labelCountArray.push_back(1);			// created a new holder for a new label
+		}
+
+
+		std::cout << "Rustom" << labelCountArray[0] << std::endl;
+		std::cout << "Potter" << labelCountArray[1] << std::endl;
+	}
 	
 
 
@@ -276,11 +317,11 @@ int main(int argc, char const *argv[])
 	f_generateFeatureVector(trainDataTable);
 	f_generateFeatureVector(testDataTable);
 
-	f_printDataTable(trainDataTable);
-	f_printDataTable(testDataTable);
+	// f_printDataTable(trainDataTable);
+	// f_printDataTable(testDataTable);
 
 	// Decision Tree generation
-	type_vvn decisionTree = f_generateDecisionTree(trainDataTable)
+	type_vvn decisionTree = f_generateDecisionTree(trainDataTable);
 
 
 }
