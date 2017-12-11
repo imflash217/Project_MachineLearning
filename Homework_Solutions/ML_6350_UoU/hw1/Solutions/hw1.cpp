@@ -185,20 +185,25 @@ void f_calculateEntropy(Node* my_Node){
 	
 	double &entropy = my_Node->entropy;
 	type_vvs &labelCounts = my_Node->classifiedLabelCounts;
-	int &totalInstances = my_Node->totalCount;			// total no of instances that are input for this node
+	int &totalCount = my_Node->totalCount;			// total no of instances that are input for this node
 	type_vi countArray;				// stores the counts (int) for each label at this node 
 
 	for(auto itrLabel : labelCounts){
-		int itrCount = std::stoi(itrLabel[1]);
-		countArray.push_back(itrCount);
-		totalInstances += itrCount;
-		std::cout << itrCount << "*/*/*" << totalInstances << std::endl;
+		double cnt = std::stoi(itrLabel[1]);
+		entropy -= (cnt/totalCount) * log2(cnt/totalCount);
+		std::cout << "entropy += " << entropy << std::endl;
+
+		// int itrCount = std::stoi(itrLabel[1]);
+		// countArray.push_back(itrCount);
+		// totalInstances += itrCount;
+		// std::cout << itrCount << "*/*/*" << totalInstances << std::endl;
 	}
-	for(auto cnt : countArray){
-		// H(S) = - sum(p_i * log2(p_i));
-		entropy -= (cnt/totalInstances) * log2(cnt/totalInstances);
-		std::cout << "entropy = " << entropy << std::endl;
-	}
+	// for(auto cnt : countArray){
+	// 	// H(S) = - sum(p_i * log2(p_i));
+	// 	// std::cout << cnt/totalInstances << std::endl;
+	// 	// entropy -= ((double)cnt/totalInstances) * log2((double)cnt/totalInstances);
+	// 	// std::cout << "entropy = " << entropy << std::endl;
+	// }
 }
 
 // create nodes for the Decision Tree
@@ -209,7 +214,8 @@ type_vvn f_generateDecisionTree(type_vvs &X){
 
 	type_vvn decisionTree;		// a 2D matrix of nodes, each row is level in DT
 
-	// create nodes
+	// create nodes*********************************
+
 	Node rootNode;		// default initialized
 	// check if the decisionTree is empty...if YES, then calculate the Global Entropy H_S
 	auto &H_S = rootNode.entropy;
@@ -225,30 +231,42 @@ type_vvn f_generateDecisionTree(type_vvs &X){
 
 	for (int i = 0; i < indicesArray.size(); i++){
 		// counting the total no samples for each label
-
-		// std::cout << "rus" << indicesArray[i] << std::endl;
 		bool newLabelFound = true;
 		for(int j = 0; j < classifiedLabelCounts.size(); j++){
 			if(classifiedLabelCounts[j][0] == X[i][0]){
 				labelCountArray[j]++;
 				newLabelFound = false;
-				std::cout << "rusX" << labelCountArray[j] << std::endl;
+				// std::cout << "rusX" << labelCountArray[j] << std::endl;
 				break;
 			}
 		}
-		std::cout << "rusPot" << newLabelFound << i << std::endl;
+		// std::cout << "rusPot" << newLabelFound << i << std::endl;
 
 		if(newLabelFound){
 			type_vs temp = {X[i][0], "1"};	// when encountering a new label
 			classifiedLabelCounts.push_back(temp);
 			labelCountArray.push_back(1);			// created a new holder for a new label
 		}
-
-
-		std::cout << "Rustom" << labelCountArray[0] << std::endl;
-		std::cout << "Potter" << labelCountArray[1] << std::endl;
 	}
-	
+
+	for(int i = 0; i < classifiedLabelCounts.size(); i++){
+		rootNode.totalCount += labelCountArray[i];
+		classifiedLabelCounts[i][1] = std::to_string(labelCountArray[i]);
+		// std::cout << classifiedLabelCounts[i][0] <<"(" << classifiedLabelCounts[i][1] << ")" << std::endl;
+	}
+
+	f_calculateEntropy(&rootNode);
+	std::cout << rootNode.entropy << "  $$$$  " << rootNode.totalCount << std::endl;
+
+	std::cout << rootNode.nodeID << ", " 
+			<< rootNode.parentValue << ", " 
+			<< rootNode.splitOn_feature << ", "
+			<< rootNode.isLeaf << ", " 
+			<< rootNode.label << ", " 
+			<< rootNode.totalCount << ", " 
+			<< rootNode.entropy << ", " 
+			<< std::endl;
+
 
 
 
