@@ -16,7 +16,7 @@ public:
 	Node() = default;						// default constructor
 
 	std::string nodeID;
-	Node* parentNode;						// parent node
+	Node* parent;						// parent node
 	std::string parentValue;				// The value of the parent node of which this node is a child
 	std::string splitOn_feature;			// feature on which the node is split
 	type_vs feature_values;					// values that the node's feature can take

@@ -213,74 +213,77 @@ type_vvn f_generateDecisionTree(type_vvs &X){
 	// <featureVector> = <X_i[4]...., X_i[9]>
 
 	type_vvn decisionTree;		// a 2D matrix of nodes, each row is level in DT
+	std::cout << "DT.size() = " << decisionTree.size() << std::endl;
 
-	// create nodes*********************************
+	if(decisionTree.size() == 0){
+		// create a root node
+		// create nodes *********************************
 
-	Node rootNode;		// default initialized
-	// check if the decisionTree is empty...if YES, then calculate the Global Entropy H_S
-	auto &H_S = rootNode.entropy;
-	auto &indicesArray = rootNode.sampleIndices;
-	auto &classifiedLabelCounts = rootNode.classifiedLabelCounts;
-	type_vi labelCountArray;
+		type_vn level0;
+		Node rootNode;				// creating a root node: default initialized
+		level0.push_back(rootNode);
+		decisionTree.push_back(level0);
+		std::cout << "DT.size() = " << decisionTree.size() << std::endl;
 
-	for (int i = 0; i < X.size(); i++){
-		indicesArray.push_back(i);
-	}
+		rootNode.parent = nullptr;	// setting the parent of rootNode as NULL
 
-	std::cout << "rus" << indicesArray[0] << std::endl;
+		// check if the decisionTree is empty...if YES, then calculate the Global Entropy H_S
+		auto &H_S = rootNode.entropy;
+		auto &indicesArray = rootNode.sampleIndices;
+		auto &classifiedLabelCounts = rootNode.classifiedLabelCounts;
+		auto &totalCount = rootNode.totalCount;
+		type_vi labelCountArray;
 
-	for (int i = 0; i < indicesArray.size(); i++){
-		// counting the total no samples for each label
-		bool newLabelFound = true;
-		for(int j = 0; j < classifiedLabelCounts.size(); j++){
-			if(classifiedLabelCounts[j][0] == X[i][0]){
-				labelCountArray[j]++;
-				newLabelFound = false;
-				// std::cout << "rusX" << labelCountArray[j] << std::endl;
-				break;
+		for (int i = 0; i < X.size(); i++){
+			indicesArray.push_back(i);
+		}
+
+		std::cout << "rus" << indicesArray[0] << std::endl;
+
+		for (int i = 0; i < indicesArray.size(); i++){
+			// counting the total no samples for each label
+			bool newLabelFound = true;
+			for(int j = 0; j < classifiedLabelCounts.size(); j++){
+				if(classifiedLabelCounts[j][0] == X[i][0]){
+					labelCountArray[j]++;
+					newLabelFound = false;
+					// std::cout << "rusX" << labelCountArray[j] << std::endl;
+					break;
+				}
+			}
+			// std::cout << "rusPot" << newLabelFound << i << std::endl;
+
+			if(newLabelFound){
+				type_vs temp = {X[i][0], "1"};	// when encountering a new label
+				classifiedLabelCounts.push_back(temp);
+				labelCountArray.push_back(1);			// created a new holder for a new label
 			}
 		}
-		// std::cout << "rusPot" << newLabelFound << i << std::endl;
 
-		if(newLabelFound){
-			type_vs temp = {X[i][0], "1"};	// when encountering a new label
-			classifiedLabelCounts.push_back(temp);
-			labelCountArray.push_back(1);			// created a new holder for a new label
+		for(int i = 0; i < classifiedLabelCounts.size(); i++){
+			totalCount += labelCountArray[i];
+			classifiedLabelCounts[i][1] = std::to_string(labelCountArray[i]);
+			// std::cout << classifiedLabelCounts[i][0] <<"(" << classifiedLabelCounts[i][1] << ")" << std::endl;
 		}
+
+		f_calculateEntropy(&rootNode);
+		std::cout << H_S << "  $$$$  " << totalCount << std::endl;
+
+		std::cout << rootNode.nodeID << ", " 
+				<< rootNode.parentValue << ", " 
+				<< rootNode.splitOn_feature << ", "
+				<< rootNode.isLeaf << ", " 
+				<< rootNode.label << ", " 
+				<< rootNode.totalCount << ", " 
+				<< rootNode.entropy << ", " 
+				<< std::endl;
+	}else{
+		std::cout << decisionTree[0][1].entropy << std::endl;
+
 	}
-
-	for(int i = 0; i < classifiedLabelCounts.size(); i++){
-		rootNode.totalCount += labelCountArray[i];
-		classifiedLabelCounts[i][1] = std::to_string(labelCountArray[i]);
-		// std::cout << classifiedLabelCounts[i][0] <<"(" << classifiedLabelCounts[i][1] << ")" << std::endl;
-	}
-
-	f_calculateEntropy(&rootNode);
-	std::cout << rootNode.entropy << "  $$$$  " << rootNode.totalCount << std::endl;
-
-	std::cout << rootNode.nodeID << ", " 
-			<< rootNode.parentValue << ", " 
-			<< rootNode.splitOn_feature << ", "
-			<< rootNode.isLeaf << ", " 
-			<< rootNode.label << ", " 
-			<< rootNode.totalCount << ", " 
-			<< rootNode.entropy << ", " 
-			<< std::endl;
-
-
-
-
-
-
 
 	return decisionTree;
-
 }
-
-
-
-
-
 
 
 
