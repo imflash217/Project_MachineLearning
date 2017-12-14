@@ -208,11 +208,11 @@ void f_calculateEntropy(Node* my_Node){
 
 // create nodes for the Decision Tree
 
-type_vvn f_generateDecisionTree(type_vvs &X){
+void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 
 	// <featureVector> = <X_i[4]...., X_i[9]>
 
-	type_vvn decisionTree;		// a 2D matrix of nodes, each row is level in DT
+	// type_vvn decisionTree;		// a 2D matrix of nodes, each row is level in DT
 	std::cout << "DT.size() = " << decisionTree.size() << std::endl;
 
 	if(decisionTree.size() == 0){
@@ -277,12 +277,43 @@ type_vvn f_generateDecisionTree(type_vvs &X){
 				<< rootNode.totalCount << ", " 
 				<< rootNode.entropy << ", " 
 				<< std::endl;
+
+		/*
+			// pick a splitOn_feature
+				for (i : X[4] to X[9]){
+					rootNode.splitOn_feature = i;
+					rootNode.feature_values.push_back('0');
+					rootNode.feature_values.push_back('1');
+					// create level;
+					create nodes;
+					for(int j = 0; j < nodes.size(); j++){
+						nodes[j].parent = rootNode;
+						nodes[j].parentValue = rootNode.feature_values[j];
+					}
+
+
+
+				}
+
+			// find the children of the node
+					// find their entropies
+
+
+			// find the Information Gain
+
+			// finalize the splitOn_feature
+
+		*/
+
+
+
+
+
 	}else{
 		std::cout << decisionTree[0][1].entropy << std::endl;
-
+		
 	}
 
-	return decisionTree;
 }
 
 
@@ -342,7 +373,8 @@ int main(int argc, char const *argv[])
 	// f_printDataTable(testDataTable);
 
 	// Decision Tree generation
-	type_vvn decisionTree = f_generateDecisionTree(trainDataTable);
+	type_vvn decisionTree;
+	f_generateDecisionTree(trainDataTable, decisionTree);
 
 
 }
