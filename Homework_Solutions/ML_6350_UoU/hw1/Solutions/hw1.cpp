@@ -280,16 +280,22 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 
 		/*
 			// pick a splitOn_feature
-				for (i : X[4] to X[9]){
+				for (int i = 4; i <= 9){
 					rootNode.splitOn_feature = i;
 					rootNode.feature_values.push_back('0');
 					rootNode.feature_values.push_back('1');
 					// create level;
-					create nodes;
+					std::vector<Node> nodes;
 					for(int j = 0; j < nodes.size(); j++){
 						nodes[j].parent = rootNode;
 						nodes[j].parentValue = rootNode.feature_values[j];
+
+						for(x_i: X){
+							if (x_i[4:9] == nodes[j].parentValue)
+						}
 					}
+
+					
 
 
 
