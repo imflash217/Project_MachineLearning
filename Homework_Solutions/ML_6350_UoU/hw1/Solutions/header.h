@@ -24,7 +24,7 @@ public:
 	std::string label;						// The LABEL if the node isLeaf
 	type_vi sampleIndices;					// indices of the samples(subset of the train/test data) that are input to the node
 	type_vvs classifiedLabelCounts;			// count of each classified labels input to the node
-	int totalCount;							// total number of labelled examples for the node
+	unsigned int totalCount = 0;							// total number of labelled examples for the node
 	double entropy = 0.0;							// entropy of the node
 	std::vector<Node*> children;			// the children nodes
 };

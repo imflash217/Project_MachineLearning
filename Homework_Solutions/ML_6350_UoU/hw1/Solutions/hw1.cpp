@@ -185,7 +185,7 @@ void f_calculateEntropy(Node* my_Node){
 	
 	double &entropy = my_Node->entropy;
 	type_vvs &labelCounts = my_Node->classifiedLabelCounts;
-	int &totalCount = my_Node->totalCount;			// total no of instances that are input for this node
+	auto &totalCount = my_Node->totalCount;			// total no of instances that are input for this node
 	type_vi countArray;				// stores the counts (int) for each label at this node 
 
 	for(auto itrLabel : labelCounts){
@@ -205,6 +205,51 @@ void f_calculateEntropy(Node* my_Node){
 	// 	// std::cout << "entropy = " << entropy << std::endl;
 	// }
 }
+
+
+// calculate the classified label counts
+void f_countClassifiedLabels(Node* node, type_vvs &X){
+	// std::cout << node->totalCount << "###############" << std::endl;
+	type_vi temp_countArray;
+	for(int i = 0; i < node->sampleIndices.size(); i++){
+		// std::cout << "a###############" << node->classifiedLabelCounts.size()<< std::endl;
+		bool newLabel = true;
+		for(int j = 0; j < node->classifiedLabelCounts.size(); j++){
+			// std::cout << "b###############" << std::endl;
+			if(node->classifiedLabelCounts[j][0] == X[i][0]){
+				// std::cout << "c###############" << std::endl;
+				temp_countArray[j]++;
+				newLabel = false;
+				// break;
+			}
+		}
+		// std::cout << "d###############" << std::endl;
+
+		if(newLabel){		// if a new label is encountered
+			// std::cout << "e###############" << std::endl;
+			temp_countArray.push_back(1);	// creates a new holder for a new label
+			type_vs temp = {X[i][0], "1"};
+			(node->classifiedLabelCounts).push_back(temp);
+			// std::cout << "f###############" << std::endl;
+		}
+	}
+	node->totalCount = node->sampleIndices.size();
+	std::cout << node->totalCount << "############### done" << std::endl;
+
+	for(int i = 0; i < node->classifiedLabelCounts.size(); i++){
+			// totalCount += labelCountArray[i];
+			node->classifiedLabelCounts[i][1] = std::to_string(temp_countArray[i]);
+			std::cout << node->classifiedLabelCounts[i][0] <<"(" << node->classifiedLabelCounts[i][1] << ")" << std::endl;
+			// std::cout << totalCount<< std::endl;
+			// std::cout << indicesArray.size()<< std::endl;
+	}
+
+
+
+
+
+}
+
 
 // create nodes for the Decision Tree
 
@@ -239,7 +284,9 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 		}
 
 		std::cout << "rus" << indicesArray[0] << std::endl;
-
+		f_countClassifiedLabels(&rootNode, X);
+		
+		/*
 		// finding the classified label counts
 		for (int i = 0; i < indicesArray.size(); i++){
 			// counting the total no samples for each label
@@ -260,12 +307,21 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 				labelCountArray.push_back(1);			// created a new holder for a new label
 			}
 		}
+		*/
 
+		std::cout << totalCount << std::endl;
+		/*
 		for(int i = 0; i < classifiedLabelCounts.size(); i++){
 			totalCount += labelCountArray[i];
 			classifiedLabelCounts[i][1] = std::to_string(labelCountArray[i]);
-			// std::cout << classifiedLabelCounts[i][0] <<"(" << classifiedLabelCounts[i][1] << ")" << std::endl;
+			std::cout << classifiedLabelCounts[i][0] <<"(" << classifiedLabelCounts[i][1] << ")" << std::endl;
+			// std::cout << totalCount<< std::endl;
+			// std::cout << indicesArray.size()<< std::endl;
 		}
+		*/
+
+		// std::cout << totalCount << std::endl;
+
 
 		f_calculateEntropy(&rootNode);
 		std::cout << H_S << "  $$$$  " << totalCount << std::endl;
@@ -278,6 +334,7 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 				<< rootNode.totalCount << ", " 
 				<< rootNode.entropy << ", " 
 				<< std::endl;
+		
 
 		/*
 			// pick a splitOn_feature
@@ -300,6 +357,7 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 
 						// find the classified lable counts
 						// find the totalCount
+						children_nodes[j].totalCount = children_nodes[j].sampleIndices.size();
 						// check for homogeniety
 						// calculate entropy
 
@@ -320,29 +378,6 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 	}
 
 }
-
-// calculate the classified label counts
-void f_countClassifiedLabels(Node* node, type_vvs &X){
-	type_vi temp_countArray;
-	for(int i = 0; i < (node->sampleIndices).size(); i++){
-		bool newLabel = true;
-		for(int j = 0; j < node->classifiedLabelCounts.size(); j++){
-			if(node->classifiedLabelCounts[j][0] == X[i][0]){
-				temp_countArray[j]++;
-				newLabel = false;
-				break;
-			}
-		}
-
-		if(newLabel){		// if a new label is encountered
-			temp_countArray.push_back(1);	// creates a new holder for a new label
-			type_vs temp = {X[i][0], "1"};
-			(node->classifiedLabelCounts).push_back(temp);
-		}
-	}
-}
-
-
 
 
 
