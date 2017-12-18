@@ -318,9 +318,13 @@ void f_nodeBranching(Node* node, type_vvs &X){
 		temp_IGvec.push_back(f_calculateInformationGain(&(temp_parent_vn[i-4])));
 		// std::cout << i << " -@@@@@@@@@@@@@- "<< f_calculateInformationGain(&(temp_parent_vn[i-4])) << "/*/*/*/*/*/*" << std::endl;
 
-
-
 	}
+
+	std::cout << "\nIG for each feature : " << std::endl;
+	for(int t = 0; t < temp_IGvec.size(); t++){
+		std::cout << temp_IGvec[t] << ", ";
+	}
+	std::cout << std::endl;
 
 	// for(int x = 0; x < temp_vvn[0][0].totalCount; x++){
 	// 	std::cout << temp_vvn[0][0].sampleIndices[x] << std::endl;
@@ -516,8 +520,8 @@ int main(int argc, char const *argv[])
 
 	// Decision Tree generation
 	type_vvn decisionTree;
-	// f_generateDecisionTree(trainDataTable, decisionTree);
-	f_generateDecisionTree(testDataTable, decisionTree);
+	f_generateDecisionTree(trainDataTable, decisionTree);
+	// f_generateDecisionTree(testDataTable, test_decisionTree);
 
 
 }
