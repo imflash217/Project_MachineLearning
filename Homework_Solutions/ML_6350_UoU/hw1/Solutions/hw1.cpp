@@ -253,10 +253,7 @@ double f_calculateInformationGain(Node* node){
 	std::cout << "## : " << node->children.size() << std::endl;
 
 	for(int i = 0; i < node->children.size(); i++){
-		// std::cout << node->children[i]->totalCount << "@#: " << informationGain << std::endl;
-		
 		informationGain += -((double) (node->children[i]->totalCount)/(node->totalCount))*((node->children[i])->entropy);
-		
 		std::cout << node->totalCount << "@#: " << informationGain << std::endl;
 		
 	}
@@ -290,28 +287,16 @@ void f_nodeBranching(Node* node, type_vvs &X){
 			temp_node.parentValue = temp_vs[j];			// feature value for the parent's feature
 
 			for(int k = 0; k < node->sampleIndices.size(); k++){
-
-				// std::cout << k <<"-zz" << std::endl;
 				if(temp_node.parentValue == X[k][i]){
 					(temp_node.sampleIndices).push_back(k);
 				}
 			}
 
 			f_countClassifiedLabels(&temp_node, X);
-			
-			// std::cout << j << "-yy" << std::endl;
-
 			f_calculateEntropy(&temp_node);
-
 			temp_vn.push_back(temp_node);
-			
-			// std::cout << j << "-xx-" << temp_parent_vn[i-4].totalCount << std::endl;
-			
 			temp_parent_vn[i-4].children.push_back(&(temp_vn[j]));
-
-			// std::cout << j << "-aa" << std::endl;
 		}
-
 
 		temp_vvn.push_back(temp_vn);
 
@@ -341,12 +326,6 @@ void f_nodeBranching(Node* node, type_vvs &X){
 	for(int i = 0; i < temp_vvn[node->splitOn_feature_index].size(); i++){
 		node->children.push_back(&(temp_vvn[node->splitOn_feature_index][i]));
 	}
-
-	// std::cout << "beyblade : " << node->children[0]->entropy << std::endl;
-
-	// for(int x = 0; x < temp_vvn[0][0].totalCount; x++){
-	// 	std::cout << temp_vvn[0][0].sampleIndices[x] << std::endl;
-	// }
 
 }
 
@@ -405,7 +384,7 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 	}
 
 	// std::cout << "DT.size() = " << decisionTree.size() << std::endl;
-	
+
 }
 
 
