@@ -244,15 +244,20 @@ void f_countClassifiedLabels(Node* node, type_vvs &X){
 			// std::cout << indicesArray.size()<< std::endl;
 	}
 
+}
 
+// calculating the Information gain of a node wrt. its children
+double f_calculateInformationGain(Node* node){
+	double informationGain = node->entropy;
 
-
-
+	for(int i = 0; i < node->children.size(); i++){
+		informationGain -= ((node->children[i]->totalCount)/(node->totalCount))*(node->children[i]->entropy);
+	}
+	return informationGain;
 }
 
 
 // create nodes for the Decision Tree
-
 void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 
 	// <featureVector> = <X_i[4]...., X_i[9]>
@@ -285,46 +290,14 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 
 		std::cout << "rus" << indicesArray[0] << std::endl;
 		f_countClassifiedLabels(&rootNode, X);
-		
-		/*
-		// finding the classified label counts
-		for (int i = 0; i < indicesArray.size(); i++){
-			// counting the total no samples for each label
-			bool newLabelFound = true;
-			for(int j = 0; j < classifiedLabelCounts.size(); j++){
-				if(classifiedLabelCounts[j][0] == X[i][0]){
-					labelCountArray[j]++;
-					newLabelFound = false;
-					// std::cout << "rusX" << labelCountArray[j] << std::endl;
-					break;
-				}
-			}
-			// std::cout << "rusPot" << newLabelFound << i << std::endl;
-
-			if(newLabelFound){
-				type_vs temp = {X[i][0], "1"};	// when encountering a new label
-				classifiedLabelCounts.push_back(temp);
-				labelCountArray.push_back(1);			// created a new holder for a new label
-			}
-		}
-		*/
-
-		std::cout << totalCount << std::endl;
-		/*
-		for(int i = 0; i < classifiedLabelCounts.size(); i++){
-			totalCount += labelCountArray[i];
-			classifiedLabelCounts[i][1] = std::to_string(labelCountArray[i]);
-			std::cout << classifiedLabelCounts[i][0] <<"(" << classifiedLabelCounts[i][1] << ")" << std::endl;
-			// std::cout << totalCount<< std::endl;
-			// std::cout << indicesArray.size()<< std::endl;
-		}
-		*/
-
 		// std::cout << totalCount << std::endl;
 
 
 		f_calculateEntropy(&rootNode);
-		std::cout << H_S << "  $$$$  " << totalCount << std::endl;
+		std::cout << H_S << "  $$x$$  " 
+					<< totalCount << " xxxxx " 
+					<< f_calculateInformationGain(&rootNode) 
+					<< std::endl;
 
 		std::cout << rootNode.nodeID << ", " 
 				<< rootNode.parentValue << ", " 
@@ -335,7 +308,6 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 				<< rootNode.entropy << ", " 
 				<< std::endl;
 		
-
 		/*
 			// pick a splitOn_feature
 				for (int i = 4; i <= 9){
@@ -355,11 +327,8 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 							}
 						}
 
-						// find the classified lable counts
-						// find the totalCount
-						children_nodes[j].totalCount = children_nodes[j].sampleIndices.size();
-						// check for homogeniety
-						// calculate entropy
+						f_countClassifiedLabels(&children_nodes[j], X);
+						f_calculateEntropy(&children_nodes[j]);
 
 					}
 

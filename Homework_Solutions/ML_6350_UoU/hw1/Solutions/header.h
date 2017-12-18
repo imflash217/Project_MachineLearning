@@ -37,6 +37,7 @@ void f_generateFeatureVector(type_vvs&);
 void f_printDataTable(type_vvs&);
 void f_calculateEntropy(Node*);
 void f_countClassifiedLabels(Node*, type_vvs&);
+double f_calculateInformationGain(Node*);
 
 
 
