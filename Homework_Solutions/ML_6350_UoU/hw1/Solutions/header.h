@@ -5,6 +5,7 @@
 #include <vector>		// std::vector
 #include <fstream>		// std::ifstream,
 #include <cstddef>		// std::size_t 
+#include <limits>		// std::numeric_limits
 
 typedef std::vector<std::string> type_vs;
 typedef std::vector<type_vs> type_vvs;
@@ -19,6 +20,7 @@ public:
 	Node* parent;						// parent node
 	std::string parentValue;				// The value of the parent node of which this node is a child
 	std::string splitOn_feature;			// feature on which the node is split
+	int splitOn_feature_index;
 	type_vs feature_values;					// values that the node's feature can take
 	bool isLeaf;							// if the node is a leaf node then TRUE else FALSE
 	std::string label;						// The LABEL if the node isLeaf

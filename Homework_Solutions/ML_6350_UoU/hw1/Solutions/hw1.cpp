@@ -299,17 +299,17 @@ void f_nodeBranching(Node* node, type_vvs &X){
 
 			f_countClassifiedLabels(&temp_node, X);
 			
-			std::cout << j << "-yy" << std::endl;
+			// std::cout << j << "-yy" << std::endl;
 
 			f_calculateEntropy(&temp_node);
 
 			temp_vn.push_back(temp_node);
 			
-			std::cout << j << "-xx-" << temp_parent_vn[i-4].totalCount << std::endl;
+			// std::cout << j << "-xx-" << temp_parent_vn[i-4].totalCount << std::endl;
 			
 			temp_parent_vn[i-4].children.push_back(&(temp_vn[j]));
 
-			std::cout << j << "-aa" << std::endl;
+			// std::cout << j << "-aa" << std::endl;
 		}
 
 
@@ -320,55 +320,35 @@ void f_nodeBranching(Node* node, type_vvs &X){
 
 	}
 
+	// finding the max IG & deciding the splitOn_feature, splitOn_feature_index
 	std::cout << "\nIG for each feature : " << std::endl;
+	double inf = std::numeric_limits<double>::infinity();
+	double max_IG = -inf;
 	for(int t = 0; t < temp_IGvec.size(); t++){
+		if(temp_IGvec[t] > max_IG){
+			max_IG = temp_IGvec[t];
+			node->splitOn_feature = std::to_string(t);
+			node->splitOn_feature_index = t;
+		}
 		std::cout << temp_IGvec[t] << ", ";
 	}
-	std::cout << std::endl;
+
+	std::cout << "\nmax_IG = " << max_IG 
+				<< " & splitOn_feature : " << node->splitOn_feature 
+				<< std::endl;
+
+
+	for(int i = 0; i < temp_vvn[node->splitOn_feature_index].size(); i++){
+		node->children.push_back(&(temp_vvn[node->splitOn_feature_index][i]));
+	}
+
+	// std::cout << "beyblade : " << node->children[0]->entropy << std::endl;
 
 	// for(int x = 0; x < temp_vvn[0][0].totalCount; x++){
 	// 	std::cout << temp_vvn[0][0].sampleIndices[x] << std::endl;
 	// }
 
-
-	/*
-			// pick a splitOn_feature
-				type_vd temp_IGvec;
-				for (int i = 4; i <= 9){
-					// rootNode.splitOn_feature = i;			// change this from rootNode to a temp node
-					// rootNode.feature_values.push_back('0');
-					// rootNode.feature_values.push_back('1');
-					// create level;
-					std::vector<Node> children_nodes;	
-					for(int j = 0; j < children_nodes.size(); j++){
-						rootNode.children.push_back(&children_nodes[j]);
-						children_nodes[j].parent = &rootNode;
-						children_nodes[j].parentValue = rootNode.feature_values[j];
-
-						for(int k = 0; k < children_nodes[j].parent->sampleIndices.size(); k++){
-							if (X[k][i] == children_nodes[j].parentValue){
-								children_nodes[j].sampleIndices.push_back(k);
-								// children_nodes[j].totalCount += 1;
-							}
-						}
-
-						f_countClassifiedLabels(&children_nodes[j], X);
-						f_calculateEntropy(&children_nodes[j]);
-
-					}
-
-					temp_IGvec.push_back(f_calculateInformationGain(&rootNode));
-				}
-
-				// select the highest information-gain feature
-				// assign the splitOn_feature
-				// set the children to next level of tree
-
-		*/
 }
-
-
-
 
 
 // create nodes for the Decision Tree
@@ -418,41 +398,6 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 				<< std::endl;
 
 		f_nodeBranching(&rootNode, X);
-		
-		/*
-			// pick a splitOn_feature
-				type_vd temp_IGvec;
-				for (int i = 4; i <= 9){
-					rootNode.splitOn_feature = i;			// change this from rootNode to a temp node
-					rootNode.feature_values.push_back('0');
-					rootNode.feature_values.push_back('1');
-					// create level;
-					std::vector<Node> children_nodes;	
-					for(int j = 0; j < children_nodes.size(); j++){
-						rootNode.children.push_back(&children_nodes[j]);
-						children_nodes[j].parent = &rootNode;
-						children_nodes[j].parentValue = rootNode.feature_values[j];
-
-						for(int k = 0; k < children_nodes[j].parent->sampleIndices.size(); k++){
-							if (X[k][i] == children_nodes[j].parentValue){
-								children_nodes[j].sampleIndices.push_back(k);
-								// children_nodes[j].totalCount += 1;
-							}
-						}
-
-						f_countClassifiedLabels(&children_nodes[j], X);
-						f_calculateEntropy(&children_nodes[j]);
-
-					}
-
-					temp_IGvec.push_back(f_calculateInformationGain(&rootNode));
-				}
-
-				// select the highest information-gain feature
-				// assign the splitOn_feature
-				// set the children to next level of tree
-
-		*/
 
 	}else{
 		// std::cout << decisionTree[0][1].totalCount << "vinay" << std::endl;
@@ -460,8 +405,7 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 	}
 
 	// std::cout << "DT.size() = " << decisionTree.size() << std::endl;
-
-
+	
 }
 
 
