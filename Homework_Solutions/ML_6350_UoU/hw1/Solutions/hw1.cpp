@@ -236,15 +236,28 @@ void f_countClassifiedLabels(Node* node, type_vvs &X){
 	node->totalCount = node->sampleIndices.size();
 	std::cout << node->totalCount << "############### done" << std::endl;
 
+	int temp_maxCount = 0;
+	int temp_maxCountIndex = 0;
+
 	for(int i = 0; i < node->classifiedLabelCounts.size(); i++){
 			// totalCount += labelCountArray[i];
 			node->classifiedLabelCounts[i][1] = std::to_string(temp_countArray[i]);
 			std::cout << node->classifiedLabelCounts[i][0] <<"(" << node->classifiedLabelCounts[i][1] << ")" << std::endl;
 			// std::cout << totalCount<< std::endl;
 			// std::cout << indicesArray.size()<< std::endl;
+
+			if(temp_countArray[i] > temp_maxCount){
+				temp_maxCount = temp_countArray[i];
+				temp_maxCountIndex = i;
+			}
 	}
 
+	node->label = &(node->classifiedLabelCounts[temp_maxCountIndex][0]);
+	std::cout << *(node->label) << "[label with max classified samples @ this node]" << std::endl;
+
 }
+
+
 
 // calculating the Information gain of a node wrt. its children
 double f_calculateInformationGain(Node* node){
@@ -307,8 +320,7 @@ void f_nodeBranching(Node* node, type_vvs &X){
 
 	// finding the max IG & deciding the splitOn_feature, splitOn_feature_index
 	std::cout << "\nIG for each feature : " << std::endl;
-	double inf = std::numeric_limits<double>::infinity();
-	double max_IG = -inf;
+	double max_IG = -INFINITE_DOUBLE;
 	for(int t = 0; t < temp_IGvec.size(); t++){
 		if(temp_IGvec[t] > max_IG){
 			max_IG = temp_IGvec[t];
@@ -325,6 +337,13 @@ void f_nodeBranching(Node* node, type_vvs &X){
 
 	for(int i = 0; i < temp_vvn[node->splitOn_feature_index].size(); i++){
 		node->children.push_back(&(temp_vvn[node->splitOn_feature_index][i]));
+		if(node->children[i]->entropy == 0.0){
+			node->children[i]->isLeaf = true;
+			std::cout << node->children[i]->entropy << " &&&&&& " << node->children[i]->isLeaf << std::endl;
+		}else{
+			node->children[i]->isLeaf = false;
+			std::cout << node->children[i]->entropy << " &&&&&& " <<node->children[i]->isLeaf << std::endl;
+		}
 	}
 
 }
@@ -339,8 +358,8 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 	std::cout << "DT.size() = " << decisionTree.size() << std::endl;
 
 	if(decisionTree.size() == 0){
-		// create a root node
 
+		// create a root node
 		type_vn level0;
 		Node rootNode;						// creating a root node: default initialized
 		level0.push_back(rootNode);
@@ -348,13 +367,6 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 		std::cout << "DT.size() = " << decisionTree.size() << std::endl;
 
 		rootNode.parent = nullptr;	// setting the parent of rootNode as NULL
-
-		// check if the decisionTree is empty...if YES, then calculate the Global Entropy
-		// auto &H_S = rootNode.entropy;
-		// auto &indicesArray = rootNode.sampleIndices;
-		// auto &classifiedLabelCounts = rootNode.classifiedLabelCounts;
-		// auto &totalCount = rootNode.totalCount;
-		// type_vi labelCountArray;
 
 		for (int i = 0; i < X.size(); i++){
 			rootNode.sampleIndices.push_back(i);
@@ -376,7 +388,9 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 				<< rootNode.entropy
 				<< std::endl;
 
-		f_nodeBranching(&rootNode, X);
+
+		f_nodeBranching(&rootNode, X);				// this will set the splitOn feature, set children (except isLeaf, label) 
+		std::cout << rootNode.children.size() << "**********" << std::endl;
 
 	}else{
 		// std::cout << decisionTree[0][1].totalCount << "vinay" << std::endl;
