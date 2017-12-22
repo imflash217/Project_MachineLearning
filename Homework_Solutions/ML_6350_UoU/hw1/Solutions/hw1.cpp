@@ -209,28 +209,37 @@ void f_calculateEntropy(Node* my_Node){
 
 // calculate the classified label counts
 void f_countClassifiedLabels(Node* node, type_vvs &X){
-	// std::cout << node->totalCount << "###############" << std::endl;
+	std::cout << node->totalCount << "###############" << std::endl;
 	type_vi temp_countArray;
 	for(int i = 0; i < node->sampleIndices.size(); i++){
-		// std::cout << "a###############" << node->classifiedLabelCounts.size()<< std::endl;
+
+		if(node->sampleIndices.size() == 0){
+			std::cout << "node->sampleIndices.size() = " << node->sampleIndices.size() << std::endl;
+			break;
+		}
+
+
+		std::cout << "a###############" << node->classifiedLabelCounts.size()<< std::endl;
 		bool newLabel = true;
 		for(int j = 0; j < node->classifiedLabelCounts.size(); j++){
-			// std::cout << "b###############" << std::endl;
+			std::cout << "b###############" << std::endl;
 			if(node->classifiedLabelCounts[j][0] == X[i][0]){
-				// std::cout << "c###############" << std::endl;
+				std::cout << "c###############" << temp_countArray[j] << std::endl;
 				temp_countArray[j]++;
+				std::cout << "c1###############" << std::endl;
 				newLabel = false;
+				std::cout << "c2###############" << std::endl;
 				// break;
 			}
 		}
-		// std::cout << "d###############" << std::endl;
+		std::cout << "d###############" << std::endl;
 
 		if(newLabel){		// if a new label is encountered
-			// std::cout << "e###############" << std::endl;
+			std::cout << "e###############" << std::endl;
 			temp_countArray.push_back(1);	// creates a new holder for a new label
 			type_vs temp = {X[i][0], "1"};
 			(node->classifiedLabelCounts).push_back(temp);
-			// std::cout << "f###############" << std::endl;
+			std::cout << "f###############" << std::endl;
 		}
 	}
 	node->totalCount = node->sampleIndices.size();
@@ -240,20 +249,29 @@ void f_countClassifiedLabels(Node* node, type_vvs &X){
 	int temp_maxCountIndex = 0;
 
 	for(int i = 0; i < node->classifiedLabelCounts.size(); i++){
-			// totalCount += labelCountArray[i];
-			node->classifiedLabelCounts[i][1] = std::to_string(temp_countArray[i]);
-			std::cout << node->classifiedLabelCounts[i][0] <<"(" << node->classifiedLabelCounts[i][1] << ")" << std::endl;
-			// std::cout << totalCount<< std::endl;
-			// std::cout << indicesArray.size()<< std::endl;
 
-			if(temp_countArray[i] > temp_maxCount){
-				temp_maxCount = temp_countArray[i];
-				temp_maxCountIndex = i;
-			}
+		if(node->totalCount == 0){
+			std::cout << "zznode->totalCount = " << node->totalCount << std::endl;
+			break;
+		}
+		// totalCount += labelCountArray[i];
+		node->classifiedLabelCounts[i][1] = std::to_string(temp_countArray[i]);
+		std::cout << node->classifiedLabelCounts[i][0] <<"(" << node->classifiedLabelCounts[i][1] << ")" << std::endl;
+		// std::cout << totalCount<< std::endl;
+		// std::cout << indicesArray.size()<< std::endl;
+
+		if(temp_countArray[i] > temp_maxCount){
+			temp_maxCount = temp_countArray[i];
+			temp_maxCountIndex = i;
+		}
 	}
 
-	node->label = &(node->classifiedLabelCounts[temp_maxCountIndex][0]);
-	std::cout << *(node->label) << "[label with max classified samples @ this node]" << std::endl;
+	if(node->totalCount != 0){
+		node->label = &(node->classifiedLabelCounts[temp_maxCountIndex][0]);
+		std::cout << "xxnode->totalCount = " << node->totalCount << std::endl;
+		std::cout << *(node->label) << "[label with max classified samples @ this node]" << std::endl;
+
+	}
 
 }
 
@@ -276,7 +294,7 @@ double f_calculateInformationGain(Node* node){
 
 // finding the right feature for a node and then creating its branches
 
-void f_nodeBranching(Node* node, type_vvs &X){
+void f_nodeBranching(Node* node, type_vvs &X, type_vvn &decisionTree){
 
 	// feature selection
 	type_vd temp_IGvec;
@@ -287,7 +305,10 @@ void f_nodeBranching(Node* node, type_vvs &X){
 		std::cout << i << "-#a" << std::endl;
 		type_vn temp_vn;		// to hold children of node
 		type_vs temp_vs;		// to hold feature values
+
+		std::cout << "#b" << std::endl;
 		Node parentNode = *node;
+		std::cout << "#c" << std::endl;
 		temp_parent_vn.push_back(parentNode);
 
 		temp_vs.push_back("0");
@@ -310,6 +331,9 @@ void f_nodeBranching(Node* node, type_vvs &X){
 			temp_vn.push_back(temp_node);
 			temp_parent_vn[i-4].children.push_back(&(temp_vn[j]));
 		}
+
+		std::cout << (temp_vn[0].isLeaf) << "/////////////////////////////////////" << std::endl;
+
 
 		temp_vvn.push_back(temp_vn);
 
@@ -334,18 +358,56 @@ void f_nodeBranching(Node* node, type_vvs &X){
 				<< " & splitOn_feature : " << node->splitOn_feature 
 				<< std::endl;
 
+		std::cout << "$$$$: decisionTree.size(): " << decisionTree.size() << std::endl;
+	if((decisionTree.size() - 1) == node->treeLevel){
+		std::cout << "$$$$: treeLevel_node : " << node->treeLevel << std::endl;
+		// create a type_vn and insert all children into it and then push that into DT
+		decisionTree.push_back(temp_vvn[node->splitOn_feature_index]);
+		
+		for(auto u = 0; u < decisionTree[decisionTree.size() - 1].size(); u++){
 
-	for(int i = 0; i < temp_vvn[node->splitOn_feature_index].size(); i++){
-		node->children.push_back(&(temp_vvn[node->splitOn_feature_index][i]));
-		if(node->children[i]->entropy == 0.0){
-			node->children[i]->isLeaf = true;
-			std::cout << node->children[i]->entropy << " &&&&&& " << node->children[i]->isLeaf << std::endl;
-		}else{
-			node->children[i]->isLeaf = false;
-			std::cout << node->children[i]->entropy << " &&&&&& " <<node->children[i]->isLeaf << std::endl;
+			if(decisionTree[decisionTree.size() - 1][u].entropy == 0.0){
+				decisionTree[decisionTree.size() - 1][u].isLeaf = true;
+				decisionTree[decisionTree.size() - 1][u].treeLevel = decisionTree[decisionTree.size() - 1][u].parent->treeLevel + 1;
+				
+				std::cout << "$$$$: isLeaf_if: " << decisionTree[decisionTree.size() - 1][u].isLeaf << std::endl;
+				std::cout << "$$$$: treeLevel_if: " << decisionTree[decisionTree.size() - 1][u].treeLevel << std::endl;
+
+			}else{
+				decisionTree[decisionTree.size() - 1][u].isLeaf = false;
+				decisionTree[decisionTree.size() - 1][u].treeLevel = decisionTree[decisionTree.size() - 1][u].parent->treeLevel + 1;
+
+				std::cout << "$$$$: isLeaf_else: " << decisionTree[decisionTree.size() - 1][u].isLeaf << std::endl;
+				std::cout << "$$$$: treeLevel_else: " << decisionTree[decisionTree.size() - 1][u].treeLevel << std::endl;
+
+			}
+
+			node->children.push_back(&(decisionTree[decisionTree.size() - 1][u]));
+		}
+	}else if((decisionTree.size() - 2) == node->treeLevel){
+		auto DT_lastRow_size = decisionTree[decisionTree.size() - 1].size();
+		auto temp_size = temp_vvn[node->splitOn_feature_index].size();
+		for(auto v = DT_lastRow_size; v < (DT_lastRow_size + temp_size); v++){
+			
+			decisionTree[decisionTree.size() - 1].push_back(temp_vvn[node->splitOn_feature_index][v - DT_lastRow_size]);
+			node->children.push_back(&(decisionTree[decisionTree.size() - 1][v]));
+			
+			if(decisionTree[decisionTree.size() - 1][v].entropy == 0.0){
+				decisionTree[decisionTree.size() - 1][v].isLeaf = true;
+				decisionTree[decisionTree.size() - 1][v].treeLevel = decisionTree[decisionTree.size() - 1][v].parent->treeLevel + 1;
+				std::cout << "$$$$: isLeaf_elseif_if: " << decisionTree[decisionTree.size() - 1][v].isLeaf << std::endl;
+				std::cout << "$$$$: treeLevel_elseif_if: " << decisionTree[decisionTree.size() - 1][v].treeLevel << std::endl;
+				// std::cout << "$$$$: treeLevel_elseif_if: ";
+				
+			}else{
+				decisionTree[decisionTree.size() - 1][v].isLeaf = false;
+				decisionTree[decisionTree.size() - 1][v].treeLevel = decisionTree[decisionTree.size() - 1][v].parent->treeLevel + 1;
+				std::cout << "$$$$: isLeaf_elseif_else: " << decisionTree[decisionTree.size() - 1][v].isLeaf << std::endl;
+				std::cout << "$$$$: treeLevel_elseif_else: " << decisionTree[decisionTree.size() - 1][v].treeLevel << std::endl;
+
+			}
 		}
 	}
-
 }
 
 
@@ -360,10 +422,10 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 	if(decisionTree.size() == 0){
 
 		// create a root node
-		type_vn level0;
+		// type_vn level0;
 		Node rootNode;						// creating a root node: default initialized
-		level0.push_back(rootNode);
-		decisionTree.push_back(level0);
+		// level0.push_back(rootNode);
+		// decisionTree.push_back(level0);
 		std::cout << "DT.size() = " << decisionTree.size() << std::endl;
 
 		rootNode.parent = nullptr;	// setting the parent of rootNode as NULL
@@ -372,6 +434,7 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 			rootNode.sampleIndices.push_back(i);
 		}
 
+		// this is a one-time process for root node
 		f_countClassifiedLabels(&rootNode, X);
 		f_calculateEntropy(&rootNode);
 		
@@ -389,15 +452,63 @@ void f_generateDecisionTree(type_vvs &X, type_vvn &decisionTree){
 				<< std::endl;
 
 
-		f_nodeBranching(&rootNode, X);				// this will set the splitOn feature, set children (except isLeaf, label) 
-		std::cout << rootNode.children.size() << "**********" << std::endl;
+
+		// pushing the root node into decisionTree array
+		type_vn level0;
+		level0.push_back(rootNode);
+		std::cout << "**********1" << std::endl;
+
+		decisionTree.push_back(level0);
+		std::cout << "**********2" << std::endl;
+
+		// 1st iteration: branching the root node and adding children into another level
+		f_nodeBranching(&(decisionTree[decisionTree.size()-1][0]), X, decisionTree);				// this will set the splitOn feature, set children , isLeaf, label
+		std::cout << decisionTree[decisionTree.size()-2][0].children.size() << "x----------" << std::endl;
+		// std::cout << "rootNode.children.size() : " << rootNode.children.size() << std::endl;
+
+
+
+		// for(int u = 0; u < rootNode.children.size(); u++){
+		// 	std::cout << "**********3" << std::endl;
+		// 	// childLevel.push_back(*rootNode.children[u]);
+		// 	std::cout << "**********4" << std::endl;
+		// 	// std::cout << ((rootNode.children[u])->label) << std::endl;
+		// }
+
+		// decisionTree.push_back(childLevel);
+
+
+		f_generateDecisionTree(X, decisionTree);
 
 	}else{
-		// std::cout << decisionTree[0][1].totalCount << "vinay" << std::endl;
-		
+
+		std::cout << decisionTree[0][0].children.size() << "vinay" << std::endl;
+		// std::cout << std::to_string(*(decisionTree[1][1]->label)) << std::endl;
+		std::cout << decisionTree[1].size() << std::endl;
+		std::cout << "vinay_decisionTree.size(): " << decisionTree.size() << std::endl;
+
+		type_vn temp_vn;
+		auto treeSize = decisionTree.size();
+		auto opLevelSize = decisionTree[treeSize - 1].size();
+
+		// Breadth First Search Implementation
+		for(int j = 0; j < opLevelSize ; j++){
+
+			std::cout << "..........................." << std::endl;
+			auto &activeNode = decisionTree[treeSize - 1][j];
+			std::cout << "x..........................." << j << std::endl;
+
+			f_nodeBranching(&(decisionTree[treeSize - 1][j]), X, decisionTree);
+
+		}
+
+		// this is imp********
+		std::cout << "Harry Potter*-------------------*-*-*-*--*-*--*-*" << std::endl;
+		f_generateDecisionTree(X, decisionTree);
+
 	}
 
-	// std::cout << "DT.size() = " << decisionTree.size() << std::endl;
+	std::cout << "xxxxxxxxxxxxxxDT.size() = " << decisionTree.size() << std::endl;
 
 }
 

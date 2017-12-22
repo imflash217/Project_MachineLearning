@@ -21,6 +21,7 @@ public:
 	std::string nodeID;
 	Node* parent;							// parent node
 	std::string parentValue;				// The value of the parent node of which this node is a child
+	int treeLevel = 0;
 	std::string splitOn_feature;			// feature on which the node is split
 	int splitOn_feature_index;
 	type_vs feature_values;					// values that the node's feature can take
@@ -33,8 +34,11 @@ public:
 	std::vector<Node*> children;			// the children nodes
 };
 
+typedef Node* type_np;
 typedef std::vector<Node> type_vn;
 typedef std::vector<type_vn> type_vvn;
+typedef std::vector<Node*> type_vnptr;
+typedef std::vector<type_vnptr> type_vvnptr;
 
 void f_parseData(std::string&, type_vvs&, int, std::string&);
 void f_generateFeatureVector(type_vvs&);
@@ -42,7 +46,7 @@ void f_printDataTable(type_vvs&);
 void f_calculateEntropy(Node*);
 void f_countClassifiedLabels(Node*, type_vvs&);
 double f_calculateInformationGain(Node*);
-void f_nodeBranching(Node*, type_vvs&);
+void f_nodeBranching(Node*, type_vvs&, type_vvn&);
 
 
 
